@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080">
+<title>FrankluX - Main Overlay</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1920px;
+    background: transparent;
+    overflow: hidden;
+    font-family: 'Rajdhani', sans-serif;
+  }
+
+  :root {
+    --neon: #00ff88;
+    --neon2: #00ffcc;
+    --neon-dim: #00ff8844;
+    --neon-glow: 0 0 8px #00ff88, 0 0 20px #00ff8866, 0 0 40px #00ff8833;
+    --neon-glow-strong: 0 0 4px #00ff88, 0 0 12px #00ff88, 0 0 30px #00ff8888;
+    --dark: #020a04;
+    --dark2: #041008;
+    --panel: #0a1f0e99;
+    --border: #00ff8855;
+    --border-bright: #00ff88cc;
+    --accent: #001a0a;
+  }
+
+  .overlay-root {
+    position: relative;
+    width: 1080px;
+    height: 1920px;
+  }
+
+  /* ── TOP HEADER ─────────────────────────────── */
+  .header {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    background: linear-gradient(180deg, #000d0599 0%, transparent 100%);
+  }
+
+  .header-logo {
+    font-family: 'Orbitron', monospace;
+    font-size: 52px;
+    font-weight: 900;
+    color: var(--neon);
+    letter-spacing: 6px;
+    text-shadow: var(--neon-glow-strong);
+    position: relative;
+  }
+  .header-logo::before {
+    content: 'FRANKLUX';
+    position: absolute;
+    inset: 0;
+    color: transparent;
+    -webkit-text-stroke: 1px #00ff8833;
+    transform: translate(2px,2px);
+  }
+
+  .header-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+  }
+  .live-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 16px;
+    border: 1px solid var(--neon);
+    background: #001a0aaa;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    box-shadow: var(--neon-glow);
+  }
+  .live-dot {
+    width: 8px; height: 8px;
+    background: #ff3333;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #ff3333, 0 0 16px #ff333366;
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  .live-text {
+    font-family: 'Orbitron', monospace;
+    font-size: 14px;
+    color: var(--neon);
+    letter-spacing: 3px;
+    text-shadow: var(--neon-glow);
+  }
+  .viewer-count {
+    font-size: 13px;
+    color: #00ff8899;
+    letter-spacing: 2px;
+    font-weight: 600;
+  }
+
+  /* ── CORNER DECORATIONS ──────────────────────── */
+  .corner {
+    position: absolute;
+    width: 60px; height: 60px;
+  }
+  .corner svg { width: 100%; height: 100%; }
+  .corner.tl { top: 115px; left: 20px; }
+  .corner.tr { top: 115px; right: 20px; transform: scaleX(-1); }
+  .corner.bl { bottom: 20px; left: 20px; transform: scaleY(-1); }
+  .corner.br { bottom: 20px; right: 20px; transform: scale(-1); }
+
+  /* ── GAMEPLAY FRAME ──────────────────────────── */
+  .gameplay-frame {
+    position: absolute;
+    top: 160px;
+    left: 40px;
+    right: 40px;
+    height: 680px;
+  }
+  .gameplay-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border: 1.5px solid var(--border-bright);
+    background: transparent;
+    box-shadow: var(--neon-glow), inset 0 0 60px #00ff8808;
+    clip-path: polygon(
+      20px 0%, calc(100% - 20px) 0%,
+      100% 20px, 100% calc(100% - 20px),
+      calc(100% - 20px) 100%, 20px 100%,
+      0% calc(100% - 20px), 0% 20px
+    );
+  }
+
+  /* Scan line effect */
+  .gameplay-inner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      #00ff8804 3px,
+      #00ff8804 4px
+    );
+    pointer-events: none;
+  }
+
+  /* Corner brackets */
+  .frame-corner {
+    position: absolute;
+    width: 32px; height: 32px;
+    border-color: var(--neon);
+    border-style: solid;
+    box-shadow: var(--neon-glow);
+  }
+  .frame-corner.tl { top: -1px; left: -1px; border-width: 3px 0 0 3px; }
+  .frame-corner.tr { top: -1px; right: -1px; border-width: 3px 3px 0 0; }
+  .frame-corner.bl { bottom: -1px; left: -1px; border-width: 0 0 3px 3px; }
+  .frame-corner.br { bottom: -1px; right: -1px; border-width: 0 3px 3px 0; }
+
+  /* Label strip at top of frame */
+  .frame-label {
+    position: absolute;
+    top: -1px; left: 50%; transform: translateX(-50%);
+    background: #00ff88;
+    color: #001a0a;
+    font-family: 'Orbitron', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    padding: 3px 20px;
+    clip-path: polygon(8px 0%, calc(100% - 8px) 0%, 100% 100%, 0% 100%);
+  }
+
+  /* Gameplay area label */
+  .game-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
+    opacity: .15;
+  }
+  .game-label-text {
+    font-family: 'Orbitron', monospace;
+    font-size: 18px;
+    letter-spacing: 6px;
+    color: var(--neon);
+  }
+
+  /* ── SIDE PANELS ────────────────────────────── */
+  .side-panel {
+    position: absolute;
+    top: 870px;
+    width: 320px;
+  }
+  .side-panel.left { left: 0; }
+  .side-panel.right { right: 0; }
+
+  .panel-block {
+    background: #0a1f0ecc;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--neon);
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    position: relative;
+    box-shadow: inset 0 0 20px #00ff8808, 2px 0 0 var(--neon) inset;
+  }
+  .panel-block::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 0 16px 16px 0;
+    border-color: transparent var(--neon) transparent transparent;
+    opacity: .6;
+  }
+
+  .panel-label {
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: #00ff8866;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .panel-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--neon);
+    text-shadow: var(--neon-glow);
+    line-height: 1;
+  }
+  .panel-sub {
+    font-size: 12px;
+    color: #00ff8877;
+    margin-top: 4px;
+  }
+
+  /* ── ALERT AREA (center lower) ──────────────── */
+  .alert-zone {
+    position: absolute;
+    top: 870px;
+    left: 320px;
+    right: 320px;
+  }
+
+  .alert-box {
+    background: linear-gradient(135deg, #041008ee, #0a1f0eee);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--neon);
+    padding: 20px 24px;
+    margin-bottom: 10px;
+    position: relative;
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+    box-shadow: var(--neon-glow);
+  }
+  .alert-icon {
+    font-size: 28px;
+    color: var(--neon);
+    text-shadow: var(--neon-glow);
+    margin-bottom: 8px;
+  }
+  .alert-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: #00ff8888;
+    margin-bottom: 4px;
+  }
+  .alert-name {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--neon);
+    text-shadow: var(--neon-glow);
+  }
+
+  /* ── BOTTOM SOCIAL BAR ─────────────────────── */
+  .social-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 90px;
+    background: linear-gradient(0deg, #000d0599 0%, transparent 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    padding-bottom: 16px;
+  }
+  .social-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #00ff8888;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 2px;
+  }
+  .social-link svg {
+    width: 24px; height: 24px;
+    fill: var(--neon);
+    filter: drop-shadow(0 0 6px #00ff88);
+  }
+  .social-divider {
+    width: 1px;
+    height: 30px;
+    background: var(--border);
+  }
+
+  /* ── SCAN LINE ANIMATION ─────────────────────── */
+  .scanline {
+    position: absolute;
+    top: 160px; left: 40px; right: 40px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ff8844, #00ff88, #00ff8844, transparent);
+    animation: scan 3s linear infinite;
+    pointer-events: none;
+  }
+  @keyframes scan {
+    0% { top: 160px; opacity: 1; }
+    95% { opacity: 1; }
+    100% { top: 840px; opacity: 0; }
+  }
+
+  /* ── HUD ELEMENTS ────────────────────────────── */
+  .hud-bar {
+    position: absolute;
+    top: 848px;
+    left: 40px; right: 40px;
+    height: 14px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .hud-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--neon), transparent);
+    opacity: .5;
+  }
+  .hud-diamond {
+    width: 10px; height: 10px;
+    background: var(--neon);
+    transform: rotate(45deg);
+    box-shadow: var(--neon-glow);
+    flex-shrink: 0;
+    margin: 0 8px;
+  }
+
+  /* ── TECH GRID ─────────────────────────────── */
+  .tech-grid-left, .tech-grid-right {
+    position: absolute;
+    top: 160px;
+    width: 40px;
+    height: 680px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px 0;
+  }
+  .tech-grid-left { left: 0; }
+  .tech-grid-right { right: 0; }
+  .grid-tick {
+    width: 20px;
+    height: 1px;
+    background: var(--neon);
+    opacity: .4;
+    margin-left: auto;
+  }
+  .tech-grid-right .grid-tick { margin-left: 0; }
+
+  /* ── STREAM STATUS ─────────────────────────── */
+  .stream-status {
+    position: absolute;
+    top: 124px; left: 40px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .status-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #00ff8866;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+  .status-dot {
+    width: 6px; height: 6px;
+    background: var(--neon);
+    border-radius: 50%;
+    box-shadow: 0 0 6px var(--neon);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  /* ── FOLLOWER BAR ─────────────────────────── */
+  .follower-bar {
+    position: absolute;
+    top: 124px; right: 40px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .follower-count {
+    font-family: 'Orbitron', monospace;
+    font-size: 16px;
+    color: var(--neon);
+    text-shadow: var(--neon-glow);
+    font-weight: 700;
+    letter-spacing: 2px;
+  }
+  .follower-label {
+    font-size: 11px;
+    color: #00ff8855;
+    letter-spacing: 2px;
+    font-weight: 600;
+  }
+
+</style>
+</head>
+<body>
+<div class="overlay-root">
+
+  <!-- SCAN LINE -->
+  <div class="scanline"></div>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-logo">FRANKLUX</div>
+    <div class="header-right">
+      <div class="live-badge">
+        <div class="live-dot"></div>
+        <span class="live-text">LIVE</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STREAM STATUS BAR -->
+  <div class="stream-status">
+    <div class="status-item"><div class="status-dot"></div>STREAMING</div>
+    <div class="status-item"><div class="status-dot" style="animation-delay:.6s"></div>HD 1080p</div>
+  </div>
+
+  <!-- FOLLOWER BAR -->
+  <div class="follower-bar">
+    <div>
+      <div class="follower-label">SEGUIDORES</div>
+      <div class="follower-count">0.0K</div>
+    </div>
+  </div>
+
+  <!-- TECH GRID LEFT -->
+  <div class="tech-grid-left">
+    <div class="grid-tick"></div><div class="grid-tick"></div><div class="grid-tick"></div>
+    <div class="grid-tick"></div><div class="grid-tick"></div><div class="grid-tick"></div>
+    <div class="grid-tick"></div><div class="grid-tick"></div><div class="grid-tick"></div>
+    <div class="grid-tick"></div><div class="grid-tick"></div><div class="grid-tick"></div>
+    <div class="grid-tick"></div><div class="grid-tick"></div><div class="grid-tick"></div>
+    <div class="grid-tick"></div><div class="grid-tick"></div><div class="grid-tick"></div>
+  </div>
+
+  <!-- TECH GRID RIGHT -->
+  <div class="tech-grid-right">
+    <div class="grid-tick"></div><div class="grid-tick"></div><div class="grid-tick"></div>
+    <div class="grid-tick"></div><div class="grid-tick"></div><div class="grid-tick"></div>
+    <div class="grid-tick"></div><div class="grid-tick"></div><div class="grid-tick"></div>
+    <div class="grid-tick"></div><div class="grid-tick"></div><div class="grid-tick"></div>
+    <div class="grid-tick"></div><div class="grid-tick"></div><div class="grid-tick"></div>
+    <div class="grid-tick"></div><div class="grid-tick"></div><div class="grid-tick"></div>
+  </div>
+
+  <!-- GAMEPLAY FRAME -->
+  <div class="gameplay-frame">
+    <div class="gameplay-inner">
+      <div class="frame-corner tl"></div>
+      <div class="frame-corner tr"></div>
+      <div class="frame-corner bl"></div>
+      <div class="frame-corner br"></div>
+      <div class="frame-label">GAMEPLAY</div>
+      <div class="game-label">
+        <div class="game-label-text">ZONA DE JUEGO</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HUD SEPARATOR BAR -->
+  <div class="hud-bar">
+    <div class="hud-line"></div>
+    <div class="hud-diamond"></div>
+    <div class="hud-line"></div>
+    <div class="hud-diamond"></div>
+    <div class="hud-line"></div>
+  </div>
+
+  <!-- LEFT PANELS -->
+  <div class="side-panel left" style="padding: 12px;">
+    <div class="panel-block">
+      <div class="panel-label">SEGUIDOR TOP</div>
+      <div class="panel-value" style="font-size:18px">@usuario</div>
+    </div>
+    <div class="panel-block">
+      <div class="panel-label">DONACIÓN</div>
+      <div class="panel-value">$0.00</div>
+      <div class="panel-sub">TOTAL SESIÓN</div>
+    </div>
+    <div class="panel-block">
+      <div class="panel-label">TIEMPO LIVE</div>
+      <div class="panel-value" id="timer">00:00:00</div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANELS -->
+  <div class="side-panel right" style="padding: 12px;">
+    <div class="panel-block">
+      <div class="panel-label">NUEVO SUBS</div>
+      <div class="panel-value">0</div>
+      <div class="panel-sub">ESTA SESIÓN</div>
+    </div>
+    <div class="panel-block">
+      <div class="panel-label">CHAT ACTIVO</div>
+      <div class="panel-value" style="font-size:20px">EN LÍNEA</div>
+    </div>
+    <div class="panel-block">
+      <div class="panel-label">TOP GIFTER</div>
+      <div class="panel-value" style="font-size:18px">@gifter</div>
+    </div>
+  </div>
+
+  <!-- ALERT ZONE (center) -->
+  <div class="alert-zone" style="padding: 12px;">
+    <div class="alert-box">
+      <div class="alert-title">▸ ÚLTIMO EVENTO</div>
+      <div class="alert-name">Esperando actividad...</div>
+    </div>
+    <div class="alert-box" style="border-top-color:#00ffcc; box-shadow: 0 0 8px #00ffcc44">
+      <div class="alert-title" style="color:#00ffcc88">▸ CHAT DESTACADO</div>
+      <div class="alert-name" style="color:#00ffcc">¡Únete al stream!</div>
+    </div>
+  </div>
+
+  <!-- SOCIAL BAR -->
+  <div class="social-bar">
+    <div class="social-link">
+      <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.55a8.27 8.27 0 0 0 4.84 1.55V6.64a4.85 4.85 0 0 1-1.07.05z"/></svg>
+      FrankluX
+    </div>
+    <div class="social-divider"></div>
+    <div class="social-link">
+      <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      FrankluX
+    </div>
+    <div class="social-divider"></div>
+    <div class="social-link">
+      <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+      FrankluX
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Live timer
+  const start = Date.now();
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function updateTimer(){
+    const d = Math.floor((Date.now()-start)/1000);
+    const h=Math.floor(d/3600), m=Math.floor((d%3600)/60), s=d%60;
+    document.getElementById('timer').textContent = `${pad(h)}:${pad(m)}:${pad(s)}`;
+  }
+  setInterval(updateTimer, 1000);
+</script>
+</body>
+</html>

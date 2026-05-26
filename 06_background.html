@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080">
+<title>FrankluX - Background</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    width: 1080px;
+    height: 1920px;
+    background: #010803;
+    overflow: hidden;
+  }
+  :root {
+    --neon: #00ff88;
+    --neon2: #00ffcc;
+    --neon3: #00cc66;
+  }
+
+  /* ── BASE ATMOSPHERE ────────────────────────── */
+  .atmo {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 100% 30% at 50% 0%, #00ff8806 0%, transparent 100%),
+      radial-gradient(ellipse 80% 40% at 50% 100%, #00ff8812 0%, transparent 80%),
+      radial-gradient(ellipse 60% 30% at 20% 60%, #00cc6608 0%, transparent 60%),
+      radial-gradient(ellipse 60% 30% at 80% 40%, #00ffcc08 0%, transparent 60%),
+      #010803;
+  }
+
+  /* ── STARS / PARTICLES ─────────────────────── */
+  .stars {
+    position: absolute; inset: 0;
+    pointer-events: none;
+  }
+
+  /* ── CITY SKYLINE SVG ─────────────────────── */
+  .city { position: absolute; inset: 0; }
+  .city svg { width: 100%; height: 100%; }
+
+  /* ── GRID FLOOR ────────────────────────────── */
+  .floor-grid {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 600px;
+    overflow: hidden;
+  }
+  .floor-grid svg { width: 100%; height: 100%; }
+
+  /* ── SCAN LINES ─────────────────────────────── */
+  .scanlines {
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 3px,
+      #00ff8803 3px, #00ff8803 4px
+    );
+    pointer-events: none;
+  }
+
+  /* ── HOLOGRAPHIC LAYERS ──────────────────── */
+  .holo {
+    position: absolute; inset: 0;
+    pointer-events: none;
+  }
+
+  /* ── VIGNETTE ──────────────────────────────── */
+  .vignette {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 90% 90% at 50% 50%, transparent 40%, #010803cc 100%);
+    pointer-events: none;
+  }
+
+  /* ── DATA STREAMS ─────────────────────────── */
+  .data-stream {
+    position: absolute;
+    top: 0;
+    width: 1px;
+    background: linear-gradient(180deg, transparent, #00ff88, transparent);
+    animation: stream-fall linear infinite;
+    opacity: 0;
+  }
+  @keyframes stream-fall {
+    0% { transform: translateY(-100%); opacity: 0; }
+    5% { opacity: .6; }
+    95% { opacity: .2; }
+    100% { transform: translateY(1920px); opacity: 0; }
+  }
+
+  /* ── MATRIX RAIN ─────────────────────────── */
+  .matrix-canvas {
+    position: absolute;
+    top: 0; left: 0;
+    opacity: .06;
+    pointer-events: none;
+  }
+
+  /* ── GLOW ORBS ─────────────────────────────── */
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, #00ff8820 0%, transparent 70%);
+    animation: orb-pulse ease-in-out infinite;
+  }
+  @keyframes orb-pulse {
+    0%,100% { transform: scale(1); opacity: .4; }
+    50% { transform: scale(1.2); opacity: .6; }
+  }
+
+  /* ── DIGITAL NOISE ─────────────────────────── */
+  .noise-canvas {
+    position: absolute; inset: 0;
+    opacity: .03;
+    pointer-events: none;
+  }
+
+  /* ── FRANKLUX WATERMARK ─────────────────── */
+  .watermark {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Orbitron', monospace;
+    font-size: 140px;
+    font-weight: 900;
+    color: #00ff8806;
+    letter-spacing: 8px;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  /* ── ENERGY LINES ─────────────────────────── */
+  .energy {
+    position: absolute;
+    left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #00ff8833, transparent);
+    animation: energy-move linear infinite;
+    opacity: 0;
+  }
+  @keyframes energy-move {
+    0% { top: 0; opacity: 0; }
+    5% { opacity: 1; }
+    95% { opacity: .5; }
+    100% { top: 1920px; opacity: 0; }
+  }
+
+</style>
+</head>
+<body>
+
+  <!-- Base atmosphere -->
+  <div class="atmo"></div>
+
+  <!-- City skyline -->
+  <div class="city">
+    <svg viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#010803"/>
+          <stop offset="50%" stop-color="#020d06"/>
+          <stop offset="100%" stop-color="#010803"/>
+        </linearGradient>
+        <!-- Building gradient -->
+        <linearGradient id="buildGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#041508"/>
+          <stop offset="100%" stop-color="#020a04"/>
+        </linearGradient>
+        <linearGradient id="buildGrad2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#0a2010"/>
+          <stop offset="100%" stop-color="#020a04"/>
+        </linearGradient>
+        <!-- Neon glow filter -->
+        <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="3" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="strongGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="6" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- Background sky -->
+      <rect width="1080" height="1920" fill="url(#skyGrad)"/>
+
+      <!-- DEEP BACKGROUND BUILDINGS (layer 1 - far) -->
+      <g opacity=".25" fill="#031008">
+        <rect x="0" y="800" width="80" height="1120"/>
+        <rect x="60" y="700" width="60" height="1220"/>
+        <rect x="100" y="750" width="90" height="1170"/>
+        <rect x="170" y="680" width="50" height="1240"/>
+        <rect x="200" y="730" width="110" height="1190"/>
+        <rect x="290" y="660" width="70" height="1260"/>
+        <rect x="340" y="720" width="80" height="1200"/>
+        <rect x="400" y="690" width="100" height="1230"/>
+        <rect x="480" y="640" width="60" height="1280"/>
+        <rect x="520" y="700" width="120" height="1220"/>
+        <rect x="620" y="670" width="80" height="1250"/>
+        <rect x="680" y="630" width="90" height="1290"/>
+        <rect x="750" y="700" width="110" height="1220"/>
+        <rect x="840" y="660" width="70" height="1260"/>
+        <rect x="890" y="720" width="100" height="1200"/>
+        <rect x="970" y="680" width="110" height="1240"/>
+      </g>
+
+      <!-- MID BUILDINGS (layer 2) -->
+      <g opacity=".5">
+        <!-- Left cluster -->
+        <rect x="0" y="900" width="70" height="1020" fill="url(#buildGrad)"/>
+        <!-- Tower with antennae -->
+        <rect x="40" y="750" width="50" height="1170" fill="url(#buildGrad)"/>
+        <rect x="62" y="720" width="6" height="30" fill="#00ff8833"/>
+        <!-- Wide building -->
+        <rect x="80" y="850" width="140" height="1070" fill="url(#buildGrad2)"/>
+        <!-- Windows grid left -->
+        <g fill="#00ff8808">
+          <rect x="90" y="860" width="12" height="8"/>
+          <rect x="110" y="860" width="12" height="8"/>
+          <rect x="130" y="860" width="12" height="8"/>
+          <rect x="150" y="860" width="12" height="8"/>
+          <rect x="170" y="860" width="12" height="8"/>
+          <rect x="190" y="860" width="12" height="8"/>
+          <rect x="90" y="880" width="12" height="8"/>
+          <rect x="110" y="880" width="12" height="8"/>
+          <rect x="150" y="880" width="12" height="8"/>
+          <rect x="190" y="880" width="12" height="8"/>
+          <rect x="90" y="900" width="12" height="8"/>
+          <rect x="130" y="900" width="12" height="8"/>
+          <rect x="170" y="900" width="12" height="8"/>
+        </g>
+
+        <!-- Tall center-left tower -->
+        <rect x="220" y="600" width="80" height="1320" fill="url(#buildGrad)"/>
+        <rect x="236" y="580" width="4" height="20" fill="#00ff8844"/>
+        <!-- Windows -->
+        <g fill="#00ff8806">
+          <rect x="230" y="620" width="18" height="12"/>
+          <rect x="260" y="620" width="18" height="12"/>
+          <rect x="280" y="620" width="18" height="12"/>
+          <rect x="230" y="645" width="18" height="12"/>
+          <rect x="260" y="645" width="18" height="12"/>
+          <rect x="230" y="670" width="18" height="12"/>
+          <rect x="280" y="670" width="18" height="12"/>
+        </g>
+
+        <!-- Center skyline -->
+        <rect x="300" y="700" width="100" height="1220" fill="url(#buildGrad2)"/>
+        <rect x="390" y="550" width="60" height="1370" fill="url(#buildGrad)"/>
+        <rect x="416" y="530" width="8" height="20" fill="#00ff8855"/>
+
+        <!-- Main center tower (tallest) -->
+        <rect x="450" y="400" width="120" height="1520" fill="url(#buildGrad)"/>
+        <rect x="490" y="370" width="40" height="30" fill="#0a1f0e"/>
+        <rect x="506" y="360" width="8" height="12" fill="#00ff8866"/>
+        <!-- Center building detail windows -->
+        <g fill="#00ff880a">
+          <rect x="460" y="420" width="20" height="14"/>
+          <rect x="490" y="420" width="20" height="14"/>
+          <rect x="520" y="420" width="20" height="14"/>
+          <rect x="460" y="445" width="20" height="14"/>
+          <rect x="520" y="445" width="20" height="14"/>
+          <rect x="460" y="470" width="20" height="14"/>
+          <rect x="490" y="470" width="20" height="14"/>
+          <rect x="520" y="470" width="20" height="14"/>
+        </g>
+
+        <!-- Right cluster -->
+        <rect x="560" y="680" width="90" height="1240" fill="url(#buildGrad2)"/>
+        <rect x="640" y="580" width="70" height="1340" fill="url(#buildGrad)"/>
+        <rect x="660" y="558" width="6" height="22" fill="#00ff8833"/>
+        <rect x="700" y="740" width="110" height="1180" fill="url(#buildGrad)"/>
+        <rect x="800" y="680" width="80" height="1240" fill="url(#buildGrad2)"/>
+        <rect x="870" y="780" width="100" height="1140" fill="url(#buildGrad)"/>
+        <rect x="960" y="720" width="120" height="1200" fill="url(#buildGrad2)"/>
+      </g>
+
+      <!-- FOREGROUND BUILDINGS (layer 3 - close) -->
+      <g opacity=".85">
+        <!-- Far left -->
+        <rect x="0" y="1100" width="100" height="820" fill="#020d06"/>
+        <!-- Windows lit -->
+        <rect x="15" y="1110" width="16" height="10" fill="#00ff8812"/>
+        <rect x="40" y="1110" width="16" height="10" fill="#00ff8812"/>
+        <rect x="65" y="1110" width="16" height="10" fill="#00ff8808"/>
+        <rect x="15" y="1130" width="16" height="10" fill="#00ff8808"/>
+        <rect x="65" y="1130" width="16" height="10" fill="#00ff8812"/>
+
+        <!-- Left building -->
+        <rect x="80" y="1000" width="130" height="920" fill="#031008"/>
+        <rect x="90" y="1010" width="22" height="14" fill="#00ff8810"/>
+        <rect x="120" y="1010" width="22" height="14" fill="#00ff8814"/>
+        <rect x="150" y="1010" width="22" height="14" fill="#00ff8808"/>
+        <rect x="90" y="1035" width="22" height="14" fill="#00ff8808"/>
+        <rect x="150" y="1035" width="22" height="14" fill="#00ff8810"/>
+        <rect x="90" y="1060" width="22" height="14" fill="#00ff8810"/>
+        <rect x="120" y="1060" width="22" height="14" fill="#00ff8814"/>
+
+        <!-- Center-left -->
+        <rect x="190" y="950" width="160" height="970" fill="#020d06"/>
+        <!-- Neon sign on building -->
+        <rect x="200" y="960" width="140" height="30" fill="#00ff8808" rx="2"/>
+        <text x="270" y="980" text-anchor="middle" font-family="Orbitron" font-size="12"
+          fill="#00ff8844" letter-spacing="2">FRANKLUX</text>
+
+        <!-- Center tower foreground -->
+        <rect x="340" y="850" width="140" height="1070" fill="#031008"/>
+        <!-- Antenna glow -->
+        <rect x="405" y="835" width="10" height="16" fill="#00ff8866"/>
+        <circle cx="410" cy="833" r="5" fill="#00ff88" opacity=".8" filter="url(#neonGlow)"/>
+        <!-- Windows -->
+        <g fill="#00ff8810">
+          <rect x="355" y="865" width="24" height="16"/>
+          <rect x="390" y="865" width="24" height="16"/>
+          <rect x="425" y="865" width="24" height="16"/>
+          <rect x="460" y="865" width="24" height="16"/>
+          <rect x="355" y="892" width="24" height="16"/>
+          <rect x="425" y="892" width="24" height="16"/>
+          <rect x="460" y="892" width="24" height="16"/>
+          <rect x="390" y="919" width="24" height="16"/>
+          <rect x="425" y="919" width="24" height="16"/>
+          <rect x="355" y="946" width="24" height="16"/>
+          <rect x="460" y="946" width="24" height="16"/>
+        </g>
+
+        <!-- Right side -->
+        <rect x="470" y="920" width="150" height="1000" fill="#020d06"/>
+        <rect x="480" y="930" width="26" height="16" fill="#00ff8808"/>
+        <rect x="516" y="930" width="26" height="16" fill="#00ff8814"/>
+        <rect x="552" y="930" width="26" height="16" fill="#00ff8808"/>
+        <rect x="590" y="930" width="26" height="16" fill="#00ff8810"/>
+
+        <rect x="600" y="860" width="120" height="1060" fill="#031008"/>
+        <rect x="608" y="844" width="6" height="16" fill="#00ff8844"/>
+
+        <!-- Far right buildings -->
+        <rect x="700" y="980" width="160" height="940" fill="#020d06"/>
+        <rect x="840" y="1060" width="110" height="860" fill="#031008"/>
+        <rect x="930" y="1000" width="150" height="920" fill="#020d06"/>
+      </g>
+
+      <!-- NEON SIGNS AND HIGHLIGHTS -->
+      <g filter="url(#neonGlow)">
+        <!-- Horizontal neon lines on buildings -->
+        <line x1="80" y1="998" x2="210" y2="998" stroke="#00ff88" stroke-width="2" opacity=".5"/>
+        <line x1="340" y1="848" x2="480" y2="848" stroke="#00ff88" stroke-width="2" opacity=".6"/>
+        <line x1="600" y1="858" x2="720" y2="858" stroke="#00ff88" stroke-width="1.5" opacity=".4"/>
+        <line x1="700" y1="978" x2="860" y2="978" stroke="#00ffcc" stroke-width="1.5" opacity=".35"/>
+        <line x1="930" y1="998" x2="1080" y2="998" stroke="#00ff88" stroke-width="1" opacity=".3"/>
+
+        <!-- Vertical accent lines -->
+        <line x1="80" y1="998" x2="80" y2="1920" stroke="#00ff88" stroke-width="1" opacity=".2"/>
+        <line x1="340" y1="848" x2="340" y2="1920" stroke="#00ff88" stroke-width="1" opacity=".25"/>
+        <line x1="480" y1="848" x2="480" y2="1920" stroke="#00ff88" stroke-width="1" opacity=".2"/>
+        <line x1="600" y1="858" x2="600" y2="1920" stroke="#00ffcc" stroke-width="1" opacity=".2"/>
+        <line x1="720" y1="858" x2="720" y2="1920" stroke="#00ff88" stroke-width="1" opacity=".15"/>
+
+        <!-- Window highlights - bright ones -->
+        <rect x="406" y="894" width="24" height="16" fill="#00ff8830"/>
+        <rect x="516" y="932" width="26" height="16" fill="#00ff8828"/>
+        <rect x="262" y="964" width="22" height="14" fill="#00ffcc20"/>
+
+        <!-- Antenna lights -->
+        <circle cx="62" cy="719" r="3" fill="#00ff88" opacity=".7"/>
+        <circle cx="416" cy="529" r="4" fill="#00ff88" opacity=".8"/>
+        <circle cx="660" cy="557" r="3" fill="#00ff88" opacity=".6"/>
+        <circle cx="411" cy="833" r="6" fill="#00ff88" opacity=".6"/>
+        <circle cx="609" cy="843" r="3" fill="#00ff8888"/>
+      </g>
+
+      <!-- REFLECTIONS ON GROUND (bottom glow) -->
+      <g opacity=".15">
+        <rect x="0" y="1700" width="1080" height="220" fill="url(#skyGrad)"/>
+        <!-- Ground reflection blobs -->
+        <ellipse cx="200" cy="1820" rx="100" ry="30" fill="#00ff88" opacity=".1"/>
+        <ellipse cx="410" cy="1800" rx="140" ry="40" fill="#00ff88" opacity=".12"/>
+        <ellipse cx="650" cy="1830" rx="120" ry="25" fill="#00ffcc" opacity=".08"/>
+        <ellipse cx="900" cy="1815" rx="100" ry="30" fill="#00ff88" opacity=".1"/>
+      </g>
+
+      <!-- HORIZON GLOW -->
+      <ellipse cx="540" cy="960" rx="300" ry="80" fill="#00ff88" opacity=".04"/>
+      <ellipse cx="540" cy="960" rx="500" ry="120" fill="#00ff88" opacity=".02"/>
+
+    </svg>
+  </div>
+
+  <!-- Floor perspective grid -->
+  <div class="floor-grid">
+    <svg viewBox="0 0 1080 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="gridFade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#00ff88" stop-opacity="0"/>
+          <stop offset="40%" stop-color="#00ff88" stop-opacity="0.06"/>
+          <stop offset="100%" stop-color="#00ff88" stop-opacity="0.12"/>
+        </linearGradient>
+      </defs>
+      <!-- Floor fill -->
+      <rect width="1080" height="600" fill="url(#gridFade)"/>
+      <!-- Converging lines from center bottom to top -->
+      <g stroke="#00ff88" stroke-width="0.5" opacity=".3">
+        <!-- Horizontal lines -->
+        <line x1="0" y1="600" x2="1080" y2="600"/>
+        <line x1="0" y1="550" x2="1080" y2="550"/>
+        <line x1="0" y1="490" x2="1080" y2="490"/>
+        <line x1="0" y1="420" x2="1080" y2="420"/>
+        <line x1="0" y1="340" x2="1080" y2="340"/>
+        <line x1="0" y1="250" x2="1080" y2="250"/>
+        <line x1="0" y1="150" x2="1080" y2="150"/>
+        <!-- Converging verticals (perspective) -->
+        <line x1="540" y1="0" x2="0" y2="600"/>
+        <line x1="540" y1="0" x2="135" y2="600"/>
+        <line x1="540" y1="0" x2="270" y2="600"/>
+        <line x1="540" y1="0" x2="405" y2="600"/>
+        <line x1="540" y1="0" x2="540" y2="600"/>
+        <line x1="540" y1="0" x2="675" y2="600"/>
+        <line x1="540" y1="0" x2="810" y2="600"/>
+        <line x1="540" y1="0" x2="945" y2="600"/>
+        <line x1="540" y1="0" x2="1080" y2="600"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Glow orbs -->
+  <div class="orb" style="width:400px;height:400px;top:700px;left:340px;animation-duration:4s;"></div>
+  <div class="orb" style="width:600px;height:300px;top:1500px;left:240px;animation-duration:6s;animation-delay:-3s;background:radial-gradient(circle, #00ff8816 0%, transparent 70%);"></div>
+  <div class="orb" style="width:200px;height:200px;top:1200px;left:100px;animation-duration:3.5s;animation-delay:-1s;"></div>
+  <div class="orb" style="width:200px;height:200px;top:1100px;right:80px;left:auto;animation-duration:5s;animation-delay:-2s;"></div>
+
+  <!-- Data streams -->
+  <div id="streams"></div>
+
+  <!-- Energy lines -->
+  <div id="energy"></div>
+
+  <!-- Watermark -->
+  <div class="watermark">FX</div>
+
+  <!-- Scan lines -->
+  <div class="scanlines"></div>
+
+  <!-- Vignette -->
+  <div class="vignette"></div>
+
+  <!-- Matrix canvas -->
+  <canvas class="matrix-canvas" id="matrix" width="1080" height="1920"></canvas>
+
+<script>
+  // Data streams
+  const sc = document.getElementById('streams');
+  for(let i=0;i<20;i++){
+    const d = document.createElement('div');
+    d.className = 'data-stream';
+    d.style.cssText=`
+      left:${Math.random()*100}%;
+      height:${100+Math.random()*200}px;
+      animation-duration:${2+Math.random()*4}s;
+      animation-delay:${Math.random()*6}s;
+      opacity:${0.1+Math.random()*0.2};
+    `;
+    sc.appendChild(d);
+  }
+
+  // Energy lines
+  const ec = document.getElementById('energy');
+  for(let i=0;i<6;i++){
+    const e = document.createElement('div');
+    e.className = 'energy';
+    e.style.cssText=`animation-duration:${3+Math.random()*3}s;animation-delay:${Math.random()*5}s;`;
+    ec.appendChild(e);
+  }
+
+  // Matrix rain
+  const canvas = document.getElementById('matrix');
+  const ctx = canvas.getContext('2d');
+  const cols = Math.floor(canvas.width / 20);
+  const drops = Array(cols).fill(1);
+  const chars = '01アイウエオカキクケコFRANKLUX!@#$%';
+
+  function drawMatrix(){
+    ctx.fillStyle = 'rgba(1,8,3,0.05)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = '#00ff88';
+    ctx.font = '14px monospace';
+    drops.forEach((y,i)=>{
+      const c = chars[Math.floor(Math.random()*chars.length)];
+      ctx.fillText(c, i*20, y*20);
+      if(y*20 > canvas.height && Math.random()>.975) drops[i]=0;
+      drops[i]++;
+    });
+  }
+  setInterval(drawMatrix, 60);
+</script>
+</body>
+</html>

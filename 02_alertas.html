@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080">
+<title>FrankluX - Alertas</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1080px;
+    min-height: 1920px;
+    background: transparent;
+    font-family: 'Rajdhani', sans-serif;
+    padding: 60px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    align-items: center;
+  }
+
+  :root {
+    --neon: #00ff88;
+    --neon2: #00ffcc;
+    --neon3: #88ff00;
+    --gold: #ffcc00;
+    --blue: #00ccff;
+    --neon-glow: 0 0 8px #00ff88, 0 0 20px #00ff8866;
+    --neon-glow-strong: 0 0 4px #00ff88, 0 0 16px #00ff88, 0 0 40px #00ff8888;
+  }
+
+  .section-header {
+    font-family: 'Orbitron', monospace;
+    font-size: 11px;
+    letter-spacing: 6px;
+    color: #00ff8844;
+    text-align: center;
+    margin-bottom: -30px;
+    width: 100%;
+  }
+
+  /* ── BASE ALERT ─────────────────────────────── */
+  .alert {
+    width: 900px;
+    position: relative;
+    animation: alertIn 0.5s cubic-bezier(0.17, 0.67, 0.35, 1) both;
+  }
+  @keyframes alertIn {
+    from { transform: translateY(-30px) scaleY(0.8); opacity: 0; }
+    to   { transform: translateY(0) scaleY(1); opacity: 1; }
+  }
+
+  .alert-inner {
+    position: relative;
+    padding: 28px 36px 24px;
+    background: linear-gradient(135deg, #020a0400, #041008cc);
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    overflow: hidden;
+  }
+
+  /* Clip shape */
+  .alert-inner {
+    clip-path: polygon(
+      0 0, calc(100% - 40px) 0, 100% 40px,
+      100% 100%, 40px 100%, 0 calc(100% - 0px)
+    );
+  }
+
+  /* Sweeping light effect */
+  .alert-inner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, #00ff8808, transparent);
+    animation: sweep 2.5s ease-in-out infinite;
+  }
+  @keyframes sweep { 0%{left:-100%} 100%{left:200%} }
+
+  /* Top accent line */
+  .alert-inner::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--color);
+    box-shadow: 0 0 12px var(--color), 0 0 30px var(--color);
+    opacity: .8;
+  }
+
+  /* Icon box */
+  .alert-icon {
+    width: 72px; height: 72px;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #041008, #0a1f0e);
+    border: 1.5px solid var(--color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    box-shadow: 0 0 16px var(--color), inset 0 0 16px #00000033;
+    clip-path: polygon(12px 0%, 100% 0%, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0% 100%, 0% 12px);
+    position: relative;
+    z-index: 1;
+  }
+
+  .alert-content {
+    flex: 1;
+    position: relative;
+    z-index: 1;
+  }
+  .alert-type {
+    font-family: 'Orbitron', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    margin-bottom: 6px;
+    opacity: .7;
+  }
+  .alert-name {
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .alert-msg {
+    font-size: 16px;
+    font-weight: 400;
+    opacity: .7;
+    letter-spacing: 1px;
+  }
+
+  .alert-badge {
+    position: absolute;
+    top: 16px; right: 20px;
+    font-family: 'Orbitron', monospace;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 2px;
+  }
+
+  /* Corner tag */
+  .alert-tag {
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 40px; height: 40px;
+    overflow: hidden;
+  }
+  .alert-tag::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 0 0 40px 40px;
+    border-color: transparent transparent var(--color) transparent;
+    opacity: .4;
+  }
+
+  /* ── FOLLOWER ────────────────────────────────── */
+  .alert-follower {
+    --color: #00ff88;
+    border-color: #00ff8833;
+    box-shadow: 0 0 30px #00ff8811, 0 4px 0 #00ff8822;
+  }
+  .alert-follower .alert-type { color: #00ff8899; }
+  .alert-follower .alert-name { color: #00ff88; text-shadow: 0 0 20px #00ff8866; }
+
+  /* ── DONATION ────────────────────────────────── */
+  .alert-donation {
+    --color: #ffcc00;
+    border-color: #ffcc0033;
+    box-shadow: 0 0 30px #ffcc0011, 0 4px 0 #ffcc0022;
+  }
+  .alert-donation .alert-type { color: #ffcc0099; }
+  .alert-donation .alert-name { color: #ffcc00; text-shadow: 0 0 20px #ffcc0066; }
+  .alert-donation .alert-icon { border-color: #ffcc00; box-shadow: 0 0 16px #ffcc00; }
+  .alert-donation .alert-badge { color: #ffcc00; text-shadow: 0 0 10px #ffcc00; }
+
+  /* ── SUBSCRIBER ──────────────────────────────── */
+  .alert-subscriber {
+    --color: #00ccff;
+    border-color: #00ccff33;
+    box-shadow: 0 0 30px #00ccff11, 0 4px 0 #00ccff22;
+  }
+  .alert-subscriber .alert-type { color: #00ccff99; }
+  .alert-subscriber .alert-name { color: #00ccff; text-shadow: 0 0 20px #00ccff66; }
+  .alert-subscriber .alert-icon { border-color: #00ccff; box-shadow: 0 0 16px #00ccff; }
+  .alert-subscriber .alert-badge { color: #00ccff; text-shadow: 0 0 10px #00ccff; }
+
+  /* ── GIFT ────────────────────────────────────── */
+  .alert-gift {
+    --color: #ff44aa;
+    border-color: #ff44aa33;
+    box-shadow: 0 0 30px #ff44aa11, 0 4px 0 #ff44aa22;
+  }
+  .alert-gift .alert-type { color: #ff44aa99; }
+  .alert-gift .alert-name { color: #ff44aa; text-shadow: 0 0 20px #ff44aa66; }
+  .alert-gift .alert-icon { border-color: #ff44aa; box-shadow: 0 0 16px #ff44aa; }
+  .alert-gift .alert-badge { color: #ff44aa; text-shadow: 0 0 10px #ff44aa; }
+
+  /* ── TOP GIFTER BANNER ──────────────────────── */
+  .top-gifter {
+    width: 900px;
+    position: relative;
+  }
+  .top-gifter-inner {
+    padding: 20px 36px;
+    background: linear-gradient(90deg, #041008cc, #0a1f0ecc, #041008cc);
+    border: 1px solid #00ff8844;
+    border-top: 2px solid #00ff88;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 0 40px #00ff8811;
+    position: relative;
+    overflow: hidden;
+  }
+  .top-gifter-inner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      90deg, transparent, transparent 40px,
+      #00ff8804 40px, #00ff8804 41px
+    );
+  }
+  .top-gifter-label {
+    font-family: 'Orbitron', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: #00ff8877;
+  }
+  .top-gifter-crown { font-size: 28px; }
+  .top-gifter-name {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--neon);
+    text-shadow: var(--neon-glow);
+    letter-spacing: 2px;
+  }
+  .top-gifter-count {
+    font-family: 'Orbitron', monospace;
+    font-size: 24px;
+    color: var(--gold);
+    text-shadow: 0 0 10px #ffcc00;
+    font-weight: 700;
+  }
+
+  /* ── PARTICLES (decorative) ─────────────────── */
+  .particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .particle {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: var(--neon);
+    border-radius: 50%;
+    opacity: 0;
+    animation: particle-float linear infinite;
+  }
+  @keyframes particle-float {
+    0% { transform: translateY(0) scale(1); opacity: .8; }
+    100% { transform: translateY(-80px) scale(0); opacity: 0; }
+  }
+
+</style>
+</head>
+<body>
+
+  <div class="section-header">▸ ALERTAS DE STREAM // FRANKLUX ◂</div>
+
+  <!-- NUEVO SEGUIDOR -->
+  <div class="alert">
+    <div class="alert-inner alert-follower">
+      <div class="alert-icon">👤</div>
+      <div class="alert-content">
+        <div class="alert-type">▸ NUEVO SEGUIDOR</div>
+        <div class="alert-name">@NombreUsuario</div>
+        <div class="alert-msg">¡Gracias por seguir el stream!</div>
+      </div>
+      <div class="alert-tag"></div>
+    </div>
+  </div>
+
+  <!-- NUEVA DONACIÓN -->
+  <div class="alert">
+    <div class="alert-inner alert-donation">
+      <div class="alert-icon">💰</div>
+      <div class="alert-content">
+        <div class="alert-type">▸ NUEVA DONACIÓN</div>
+        <div class="alert-name">@Donante</div>
+        <div class="alert-msg">¡Increíble stream, sigue así!</div>
+      </div>
+      <div class="alert-badge">$10.00</div>
+      <div class="alert-tag"></div>
+    </div>
+  </div>
+
+  <!-- NUEVO SUSCRIPTOR -->
+  <div class="alert">
+    <div class="alert-inner alert-subscriber">
+      <div class="alert-icon">⭐</div>
+      <div class="alert-content">
+        <div class="alert-type">▸ NUEVO SUSCRIPTOR</div>
+        <div class="alert-name">@Subscriber</div>
+        <div class="alert-msg">¡Bienvenido al equipo FrankluX!</div>
+      </div>
+      <div class="alert-badge">SUB x1</div>
+      <div class="alert-tag"></div>
+    </div>
+  </div>
+
+  <!-- REGALO -->
+  <div class="alert">
+    <div class="alert-inner alert-gift">
+      <div class="alert-icon">🎁</div>
+      <div class="alert-content">
+        <div class="alert-type">▸ TOP GIFTER</div>
+        <div class="alert-name">@GiftMaster</div>
+        <div class="alert-msg">¡Envió 10 regalos! ¡Eres increíble!</div>
+      </div>
+      <div class="alert-badge">×10</div>
+      <div class="alert-tag"></div>
+    </div>
+  </div>
+
+  <!-- TOP GIFTER BANNER -->
+  <div class="top-gifter">
+    <div class="top-gifter-inner">
+      <div>
+        <div class="top-gifter-label">🏆 TOP GIFTER DEL STREAM</div>
+        <div class="top-gifter-name">@TopGifter</div>
+      </div>
+      <div class="top-gifter-count">🎁 × 50</div>
+    </div>
+  </div>
+
+</body>
+</html>

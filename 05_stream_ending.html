@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080">
+<title>FrankluX - Stream Ending</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    width: 1080px;
+    height: 1920px;
+    background: #020a04;
+    overflow: hidden;
+    font-family: 'Rajdhani', sans-serif;
+  }
+  :root {
+    --neon: #00ff88;
+    --neon-glow: 0 0 10px #00ff88, 0 0 30px #00ff8855;
+    --neon-glow-strong: 0 0 6px #00ff88, 0 0 20px #00ff88, 0 0 60px #00ff8888;
+  }
+
+  .bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 30%, #00ff8808 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 50% 90%, #00ff8806 0%, transparent 60%),
+      #020a04;
+  }
+
+  .scanlines {
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 3px, #00ff8803 3px, #00ff8803 4px);
+  }
+
+  /* Diagonal grid */
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(#00ff8806 1px, transparent 1px),
+      linear-gradient(90deg, #00ff8806 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: .5;
+  }
+
+  /* Fading overlay - stream ending effect */
+  .fade-overlay {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, #020a04cc 100%);
+    pointer-events: none;
+  }
+
+  /* Bars */
+  .bar-h {
+    position: absolute; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--neon), #00ffcc, var(--neon), transparent);
+    box-shadow: 0 0 20px var(--neon);
+  }
+  .bar-h.top { top: 0; }
+  .bar-h.bot { bottom: 0; }
+
+  /* Static noise animation at top */
+  .noise {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 300px;
+    background: repeating-linear-gradient(
+      0deg, #00ff8803 0px, transparent 1px, transparent 4px
+    );
+    opacity: .4;
+    animation: noise-shift 0.2s step-end infinite;
+  }
+  @keyframes noise-shift {
+    0%  { background-position: 0 0; }
+    25% { background-position: 0 -3px; }
+    50% { background-position: 0 5px; }
+    75% { background-position: 0 -2px; }
+    100%{ background-position: 0 0; }
+  }
+
+  /* Corner ornaments */
+  .orn { position: absolute; width: 100px; height: 100px; }
+  .orn svg { width: 100%; height: 100%; }
+  .orn.tl { top: 40px; left: 40px; }
+  .orn.tr { top: 40px; right: 40px; transform: scaleX(-1); }
+  .orn.bl { bottom: 40px; left: 40px; transform: scaleY(-1); }
+  .orn.br { bottom: 40px; right: 40px; transform: scale(-1); }
+
+  /* Content */
+  .content {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 60px;
+  }
+
+  .end-badge {
+    font-family: 'Orbitron', monospace;
+    font-size: 12px;
+    letter-spacing: 8px;
+    color: #00ff8844;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .end-badge::before, .end-badge::after {
+    content: ''; width: 60px; height: 1px;
+    background: #00ff8833;
+  }
+
+  .end-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 68px;
+    font-weight: 900;
+    text-align: center;
+    line-height: 1;
+    margin-bottom: 12px;
+    color: var(--neon);
+    text-shadow: var(--neon-glow-strong);
+  }
+  .end-title span {
+    display: block;
+    font-size: 42px;
+    color: #00ff8877;
+    letter-spacing: 4px;
+  }
+
+  .end-line {
+    width: 500px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--neon), transparent);
+    box-shadow: var(--neon-glow);
+    margin: 30px 0;
+  }
+
+  .end-thanks {
+    font-size: 22px;
+    font-weight: 400;
+    color: #00ff8866;
+    letter-spacing: 3px;
+    text-align: center;
+    max-width: 700px;
+    margin-bottom: 60px;
+    line-height: 1.8;
+  }
+
+  /* Stats grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    width: 900px;
+    margin-bottom: 60px;
+  }
+  .stat-card {
+    background: #041008cc;
+    border: 1px solid #00ff8833;
+    border-top: 2px solid #00ff8888;
+    padding: 24px 20px;
+    text-align: center;
+    position: relative;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
+  }
+  .stat-card-label {
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: #00ff8855;
+    margin-bottom: 8px;
+  }
+  .stat-card-value {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--neon);
+    text-shadow: var(--neon-glow);
+    line-height: 1;
+  }
+  .stat-card-sub {
+    font-size: 11px;
+    color: #00ff8844;
+    margin-top: 4px;
+  }
+
+  /* Social cards */
+  .social-section {
+    display: flex; flex-direction: column; align-items: center; gap: 16px;
+    margin-bottom: 50px;
+    width: 900px;
+  }
+  .social-cta {
+    font-family: 'Orbitron', monospace;
+    font-size: 11px;
+    letter-spacing: 6px;
+    color: #00ff8844;
+    text-align: center;
+  }
+  .social-row {
+    display: flex; gap: 20px; align-items: center; justify-content: center;
+  }
+  .social-card {
+    display: flex; align-items: center; gap: 12px;
+    background: #041008cc;
+    border: 1px solid #00ff8822;
+    padding: 14px 24px;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .social-icon { font-size: 22px; }
+  .social-handle {
+    font-size: 18px;
+    font-weight: 700;
+    color: #00ff8888;
+    letter-spacing: 1px;
+  }
+
+  /* FrankluX logo bottom */
+  .brand-bottom {
+    font-family: 'Orbitron', monospace;
+    font-size: 18px;
+    font-weight: 900;
+    color: #00ff8833;
+    letter-spacing: 14px;
+    text-align: center;
+  }
+
+  /* Particles */
+  .particles { position: absolute; inset: 0; pointer-events: none; }
+  .p {
+    position: absolute; border-radius: 50%;
+    background: var(--neon); animation: pfloat linear infinite; opacity: 0;
+  }
+  @keyframes pfloat {
+    0% { transform: translateY(0) scale(1); opacity: 0; }
+    10% { opacity: .5; }
+    90% { opacity: .2; }
+    100% { transform: translateY(-1920px) scale(0); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="bg"></div>
+  <div class="grid"></div>
+  <div class="scanlines"></div>
+  <div class="fade-overlay"></div>
+  <div class="noise"></div>
+  <div class="particles" id="particles"></div>
+
+  <div class="bar-h top"></div>
+  <div class="bar-h bot"></div>
+
+  <!-- Corner ornaments -->
+  <div class="orn tl"><svg viewBox="0 0 100 100" fill="none">
+    <polyline points="100,0 0,0 0,100" stroke="#00ff88" stroke-width="2" opacity=".5"/>
+    <polyline points="70,0 0,0 0,70" stroke="#00ff88" stroke-width="1" opacity=".25"/>
+    <rect x="-4" y="-4" width="12" height="12" fill="#00ff88" opacity=".4"/>
+  </svg></div>
+  <div class="orn tr"><svg viewBox="0 0 100 100" fill="none">
+    <polyline points="100,0 0,0 0,100" stroke="#00ff88" stroke-width="2" opacity=".5"/>
+    <polyline points="70,0 0,0 0,70" stroke="#00ff88" stroke-width="1" opacity=".25"/>
+    <rect x="-4" y="-4" width="12" height="12" fill="#00ff88" opacity=".4"/>
+  </svg></div>
+  <div class="orn bl"><svg viewBox="0 0 100 100" fill="none">
+    <polyline points="100,0 0,0 0,100" stroke="#00ff88" stroke-width="2" opacity=".5"/>
+    <polyline points="70,0 0,0 0,70" stroke="#00ff88" stroke-width="1" opacity=".25"/>
+    <rect x="-4" y="-4" width="12" height="12" fill="#00ff88" opacity=".4"/>
+  </svg></div>
+  <div class="orn br"><svg viewBox="0 0 100 100" fill="none">
+    <polyline points="100,0 0,0 0,100" stroke="#00ff88" stroke-width="2" opacity=".5"/>
+    <polyline points="70,0 0,0 0,70" stroke="#00ff88" stroke-width="1" opacity=".25"/>
+    <rect x="-4" y="-4" width="12" height="12" fill="#00ff88" opacity=".4"/>
+  </svg></div>
+
+  <div class="content">
+
+    <div class="end-badge">STREAM FINALIZADO</div>
+
+    <div class="end-title">
+      GRACIAS POR
+      <span>ESTAR AQUÍ</span>
+    </div>
+
+    <div class="end-line"></div>
+
+    <div class="end-thanks">
+      Ha sido un stream increíble.<br>
+      Su apoyo significa todo para mí.<br>
+      <strong style="color:#00ff8899">¡Nos vemos en el próximo!</strong>
+    </div>
+
+    <!-- Session stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-card-label">SEGUIDORES</div>
+        <div class="stat-card-value">+0</div>
+        <div class="stat-card-sub">ESTA SESIÓN</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">DONACIONES</div>
+        <div class="stat-card-value">$0</div>
+        <div class="stat-card-sub">TOTAL</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">TIEMPO EN VIVO</div>
+        <div class="stat-card-value" id="runtime">0:00</div>
+        <div class="stat-card-sub">HORAS</div>
+      </div>
+    </div>
+
+    <!-- Social links -->
+    <div class="social-section">
+      <div class="social-cta">▸ SÍGUEME EN REDES ◂</div>
+      <div class="social-row">
+        <div class="social-card">
+          <span class="social-icon">📱</span>
+          <span class="social-handle">@FrankluX</span>
+        </div>
+        <div class="social-card">
+          <span class="social-icon">🐦</span>
+          <span class="social-handle">@FrankluX</span>
+        </div>
+        <div class="social-card">
+          <span class="social-icon">📷</span>
+          <span class="social-handle">@FrankluX</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="brand-bottom">FRANKLUX</div>
+
+  </div>
+
+<script>
+  const pc = document.getElementById('particles');
+  for(let i=0;i<30;i++){
+    const p = document.createElement('div');
+    p.className = 'p';
+    const s = Math.random()*3+1;
+    p.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;bottom:0;animation-duration:${Math.random()*10+5}s;animation-delay:${Math.random()*8}s;`;
+    pc.appendChild(p);
+  }
+
+  // Runtime counter
+  const start = Date.now();
+  function tick(){
+    const s = Math.floor((Date.now()-start)/1000);
+    const h = Math.floor(s/3600), m = Math.floor((s%3600)/60), sc = s%60;
+    document.getElementById('runtime').textContent = h > 0
+      ? `${h}:${String(m).padStart(2,'0')}:${String(sc).padStart(2,'0')}`
+      : `${m}:${String(sc).padStart(2,'0')}`;
+  }
+  setInterval(tick,1000);
+</script>
+</body>
+</html>
