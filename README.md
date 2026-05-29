@@ -1,112 +1,123 @@
-# 🎮 FrankluX — Pack de Overlays para TikTok Live Studio
-### Estética Futurista / Sci-Fi / Verde Neón
+# FrankluX — Pack de Overlays
+### TikTok Live Studio · Estética Futurista · Verde Neón
 
 ---
 
-## 📦 ARCHIVOS INCLUIDOS
+## ARCHIVOS
 
-| Archivo | Descripción | Uso |
-|---------|-------------|-----|
-| `01_main_overlay.html` | **Overlay Principal** — Marco de gameplay + paneles laterales + widgets | Capa principal del stream |
-| `02_alertas.html` | **Alertas** — Seguidor, Donación, Suscriptor, Gift, Top Gifter | Alertas animadas |
-| `03_starting_soon.html` | **Starting Soon** — Pantalla de inicio con countdown | Antes del stream |
-| `04_brb.html` | **BRB** — Be Right Back animado con visualizador | Cuando pausas |
-| `05_stream_ending.html` | **Stream Ending** — Cierre con stats de sesión | Al terminar |
-| `06_background.html` | **Fondo Cyberpunk** — Ciudad futurista con Matrix rain | Fondo independiente |
-
----
-
-## 🎨 IDENTIDAD VISUAL
-
-- **Color principal:** `#00ff88` (Verde neón brillante)
-- **Color secundario:** `#00ffcc` (Cian-verde)
-- **Fondo base:** `#020a04` (Negro profundo verdoso)
-- **Fuente display:** Orbitron (futurista/tecnológica)
-- **Fuente UI:** Rajdhani (limpia y legible)
-- **Efectos:** Glow, scanlines, glitch, particles, matrix rain
+| # | Archivo | Descripción |
+|---|---------|-------------|
+| 01 | `01_main_overlay.html` | Overlay principal — marco gameplay + paneles + alertas animadas + contador de seguidores |
+| 02 | `02_alertas.html` | Referencia visual de alertas — seguidor, donación, suscriptor, gift, top gifter |
+| 03 | `03_starting_soon.html` | Pantalla de inicio con countdown automático |
+| 04 | `04_brb.html` | Be Right Back — anillos giratorios + visualizador |
+| 05 | `05_stream_ending.html` | Cierre de stream con stats de sesión |
+| 06 | `06_background.html` | Fondo cyberpunk independiente — ciudad + matrix rain |
+| 07 | `07_camera_overlay.html` | Marco de cámara — 1920×1080, con badge LIVE y nombre |
 
 ---
 
-## 🖥️ CONFIGURACIÓN EN TIKTOK LIVE STUDIO
+## IDENTIDAD VISUAL
 
-### Resolución y Formato
-- **Resolución:** 1080 × 1920 px (vertical 9:16)
-- **Escala del navegador:** 100%
-
-### Cómo usar cada archivo
-
-#### Overlay Principal (`01_main_overlay.html`)
-1. Agregar como **Fuente de Navegador** en OBS/TikTok Live Studio
-2. Resolución: 1080 × 1920
-3. Colocar **sobre** el gameplay
-4. El área central transparente deja ver el juego
-
-#### Alertas (`02_alertas.html`)
-- Conectar a tu sistema de alertas (Streamlabs, StreamElements, etc.)
-- O usar como referencia visual para configurar alertas individuales
-- Cada alerta tiene su propio estilo de color:
-  - 🟢 **Seguidor** → Verde neón
-  - 🟡 **Donación** → Dorado
-  - 🔵 **Suscriptor** → Cian
-  - 🩷 **Gift/Regalo** → Rosa neón
-
-#### Pantallas Especiales (Starting Soon, BRB, Ending)
-1. Agregar como fuente de escena
-2. Cambiar de escena según el momento del stream
-3. El countdown en Starting Soon es automático (5 min)
-4. El contador BRB anima solo
-5. El Stream Ending tiene timer de sesión automático
-
-#### Fondo (`06_background.html`)
-1. Agregar como primera capa (más abajo en la pila)
-2. Funciona con o sin overlay encima
-3. El Matrix rain y las partículas son dinámicas
+- **Color principal:** `#00ff88` — verde neón
+- **Fondo base:** `#030806` — negro profundo
+- **Tipografías:** Syne (títulos) · DM Mono (UI) · Space Mono (datos)
+- **Estilo:** Futurista sofisticado — HUD técnico, líneas finas, glow contenido
 
 ---
 
-## ⚙️ PERSONALIZACIÓN
+## CONFIGURACIÓN EN TIKTOK LIVE STUDIO
 
-### Cambiar el nombre de usuario en redes sociales
-Busca `@FrankluX` en cada archivo y reemplaza con tu handle
+### Resolución
+Todos los overlays están en **1080 × 1920** (vertical 9:16), excepto el de cámara que es **1920 × 1080**.
 
-### Cambiar el tiempo del countdown (Starting Soon)
-En `03_starting_soon.html`, busca:
-```javascript
-let secs = 5*60;  // ← Cambiar 5 por los minutos que quieras
+### Cómo agregar cada archivo
+1. Subir a GitHub Pages (ver sección abajo)
+2. En TikTok Live Studio → **Agregar fuente** → **Navegador**
+3. Pegar la URL del archivo
+4. Configurar la resolución correspondiente
+
+### Orden de capas (de abajo hacia arriba)
+```
+↑  02_alertas / sistema de alertas externo   ← encima de todo
+↑  07_camera_overlay.html  (1920×1080, escalar a gusto)
+↑  01_main_overlay.html    (1080×1920)
+↑  Captura del juego
+↑  06_background.html      (1080×1920)       ← abajo de todo
 ```
 
-### Ajustar colores
-El color principal está en `:root { --neon: #00ff88; }`
-Cambia ese valor en cualquier archivo para modificar el color
-
-### Agregar tu juego actual (Starting Soon)
-Busca `<div class="info-panel-value">TBD</div>` y reemplaza `TBD`
-
----
-
-## 🎯 TIPS PARA EL STREAM
-
-1. **Orden de capas en OBS:**
-   - 1ro: Fondo (background.html)
-   - 2do: Captura del juego
-   - 3ro: Overlay principal (main_overlay.html)
-   - 4to: Alertas (encima de todo)
-
-2. **El overlay principal tiene fondo transparente** — el juego se ve a través del área central
-
-3. **Para exportar como PNG transparente:** Abre el archivo en Chrome → Tomar screenshot con herramienta de recorte (solo los elementos del overlay, no el fondo)
-
-4. **Para usar en OBS:** Fuente → Navegador → URL local (file:///ruta/al/archivo.html)
+### Pantallas especiales (escenas separadas)
+Estas no van encima del overlay principal, reemplazan toda la vista:
+- `03_starting_soon.html` → antes de empezar
+- `04_brb.html` → cuando pausás
+- `05_stream_ending.html` → al terminar
 
 ---
 
-## 📱 REDES SOCIALES
+## OVERLAY DE CÁMARA (07)
 
-Recuerda actualizar los handles en todos los archivos:
-- TikTok: `@FrankluX`  
-- Twitter/X: `@FrankluX`
-- Instagram: `@FrankluX`
+- **Resolución:** 1920 × 1080
+- **Uso:** Agregar como Browser Source encima de la fuente de webcam
+- **Posición:** Esquina inferior izquierda (por defecto)
+- La cámara se ve a través del marco — el fondo es transparente
+- Incluye: bordes HUD, badge LIVE animado, nombre FrankluX, indicador REC, scanline y glitch sutil
+
+Para mover la posición, escalar desde las esquinas en TikTok Live Studio directamente.
 
 ---
 
-*Pack diseñado exclusivamente para FrankluX • Estética FuturisticNeon v1.0*
+## OVERLAY PRINCIPAL (01) — ANIMACIONES AUTOMÁTICAS
+
+El `01_main_overlay.html` funciona solo sin configuración externa:
+
+**Contador de seguidores**
+- Arranca desde el número configurado en `CFG.followers`
+- Sube automáticamente con animación y partículas
+- Barra de progreso hacia la meta
+
+**Alertas demo rotativas** (cada ~11 segundos)
+- 🟢 Nuevo Seguidor
+- 🟡 Nueva Donación
+- 🔵 Nuevo Suscriptor
+- 🟣 Top Gifter
+
+**Para personalizar**, abrí el archivo y modificá la sección `CONFIG`:
+```javascript
+const CFG = {
+  followers: 247,   // ← tu número real de seguidores
+  goal: 500,        // ← tu meta
+  growMs: 9000,     // ← cada cuántos ms sube un seguidor
+  alertMs: 11000,   // ← cada cuántos ms aparece una alerta
+};
+```
+
+---
+
+## GITHUB PAGES — PUBLICAR LOS ARCHIVOS
+
+1. Crear repositorio en github.com → `franklux-overlays` (público)
+2. Subir todos los archivos HTML
+3. Settings → Pages → Branch: main → Save
+4. Esperar 1-2 minutos
+5. URL base: `https://TuUsuario.github.io/franklux-overlays/`
+
+Ejemplo de URL completa:
+```
+https://TuUsuario.github.io/franklux-overlays/01_main_overlay.html
+```
+
+---
+
+## PERSONALIZACIÓN RÁPIDA
+
+| Qué cambiar | Dónde |
+|-------------|-------|
+| Nombre de usuario en redes | Buscar `@FrankluX` en cada archivo |
+| Seguidores iniciales | `CFG.followers` en el archivo 01 |
+| Meta de seguidores | `CFG.goal` en el archivo 01 |
+| Minutos del countdown | `let secs = 5*60` en el archivo 03 |
+| Juego actual | `<div class="info-val">TBD</div>` en el archivo 03 |
+
+---
+
+*FrankluX Stream Pack v2.0 — 7 archivos · Diseño futurista sofisticado*
