@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>FrankluX — Camera Overlay</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --g:#00ff88;--gb:#00ff8840;--gx:#00ff8870;
+  --w:#f0f4f0;--w3:#3a4e3a;
+  --glow:0 0 10px #00ff8860,0 0 30px #00ff8825;
+  --glow2:0 0 8px #00ff88,0 0 22px #00ff8888,0 0 50px #00ff8835;
+}
+body{
+  width:1920px;height:1080px;
+  background:transparent;
+  overflow:hidden;
+  font-family:'DM Mono',monospace;
+}
+
+.cam{
+  position:absolute;
+  bottom:0;left:0;
+  width:1920px;height:1080px;
+}
+
+/* ── BORDER ── */
+.cam-border{
+  position:absolute;inset:0;
+  border:2px solid var(--gb);
+  box-shadow:var(--glow),inset 0 0 40px #00ff8806;
+  pointer-events:none;z-index:5;
+}
+
+/* ── CORNER ACCENTS ── */
+.ca{position:absolute;width:48px;height:48px;z-index:6;pointer-events:none;}
+.ca::before,.ca::after{content:'';position:absolute;background:var(--g);box-shadow:var(--glow2);}
+.ca::before{width:100%;height:3px;top:0;left:0;}
+.ca::after{width:3px;height:100%;top:0;left:0;}
+.ca.tl{top:-2px;left:-2px;}
+.ca.tr{top:-2px;right:-2px;transform:scaleX(-1);}
+.ca.bl{bottom:-2px;left:-2px;transform:scaleY(-1);}
+.ca.br{bottom:-2px;right:-2px;transform:scale(-1);}
+
+/* ── CORNER DOTS ── */
+.cdot{position:absolute;width:8px;height:8px;border-radius:50%;
+  background:var(--g);box-shadow:var(--glow2);z-index:7;}
+.cdot.tl{top:12px;left:12px;}
+.cdot.tr{top:12px;right:12px;}
+.cdot.bl{bottom:86px;left:12px;}
+.cdot.br{bottom:86px;right:12px;}
+
+/* ── RULER TICKS top ── */
+.ticks-h{position:absolute;left:60px;right:60px;
+  display:flex;justify-content:space-between;z-index:6;pointer-events:none;}
+.ticks-h.top{top:6px;}.ticks-h.bot{bottom:86px;}
+.th{width:2px;height:8px;background:var(--g);opacity:.22;}
+.th.b{height:14px;opacity:.55;}
+
+/* ── RULER TICKS sides ── */
+.ticks-v{position:absolute;top:18px;bottom:90px;
+  display:flex;flex-direction:column;justify-content:space-between;z-index:6;pointer-events:none;}
+.ticks-v.lft{left:6px;}.ticks-v.rgt{right:6px;}
+.tv{width:8px;height:2px;background:var(--g);opacity:.22;}
+.tv.b{width:14px;opacity:.55;}
+
+/* ── SCAN LINE ── */
+.cam-scan{
+  position:absolute;left:0;right:0;height:2px;z-index:4;pointer-events:none;
+  background:linear-gradient(90deg,transparent,#00ff8828,var(--g),#00ff8828,transparent);
+  animation:cscan 4s linear infinite;opacity:0;
+}
+@keyframes cscan{
+  0%{top:0;opacity:0}4%{opacity:.5}88%{opacity:.2}100%{top:calc(100% - 80px);opacity:0}
+}
+
+/* ── SCANLINES TEXTURE ── */
+.cam-lines{
+  position:absolute;inset:0;bottom:80px;pointer-events:none;z-index:2;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,#00000014 3px,#00000014 4px);
+}
+
+/* ── GLITCH ── */
+.cam-glitch{
+  position:absolute;inset:0;bottom:80px;pointer-events:none;z-index:3;opacity:0;
+  animation:gfx 10s steps(1) infinite;
+}
+@keyframes gfx{
+  0%,95%,100%{opacity:0}
+  96%{opacity:1;background:linear-gradient(180deg,transparent 28%,#00ff8807 28%,#00ff8807 29%,transparent 29%);}
+  98%{opacity:1;background:linear-gradient(180deg,transparent 60%,#00ff8805 60%,#00ff8805 61%,transparent 61%);}
+}
+
+/* ── VIGNETTE on cam ── */
+.cam-vig{
+  position:absolute;inset:0;bottom:80px;pointer-events:none;z-index:3;
+  background:radial-gradient(ellipse 90% 90% at 50% 50%,transparent 50%,#03080660 100%);
+}
+
+/* ── CAM TAG top left ── */
+.cam-tag{
+  position:absolute;top:-2px;left:-2px;z-index:8;
+  background:#030806f0;
+  border:2px solid var(--gb);border-bottom:none;border-left:none;
+  padding:8px 20px;
+  display:flex;align-items:center;gap:8px;
+}
+.tag-dot{width:7px;height:7px;border-radius:50%;background:var(--g);
+  box-shadow:var(--glow2);animation:tdot 2s ease-in-out infinite;}
+@keyframes tdot{0%,100%{opacity:1}50%{opacity:.15}}
+.tag-lbl{font-size:12px;letter-spacing:5px;color:var(--g);text-shadow:var(--glow);}
+
+/* ── REC tag top right ── */
+.cam-rec{
+  position:absolute;top:-2px;right:-2px;z-index:8;
+  background:#030806f0;
+  border:2px solid var(--gb);border-bottom:none;border-right:none;
+  padding:8px 16px;
+  font-size:11px;letter-spacing:3px;color:var(--w3);
+}
+
+/* ══ NAME TAG ══ */
+.nametag{
+  position:absolute;bottom:-2px;left:-2px;right:-2px;
+  height:80px;z-index:8;
+  background:#030806f2;
+  border:2px solid var(--gb);border-top:none;
+  display:flex;align-items:center;
+  overflow:hidden;
+}
+
+/* top glow line */
+.nametag::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1.5px;
+  background:linear-gradient(90deg,transparent,var(--g),transparent);
+  box-shadow:var(--glow);opacity:.55;
+}
+
+/* LIVE section */
+.nt-live{
+  flex-shrink:0;height:100%;
+  padding:0 28px;
+  border-right:2px solid var(--gb);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  background:#00ff8806;
+}
+.nt-dot{
+  width:10px;height:10px;border-radius:50%;background:var(--g);
+  box-shadow:0 0 0 0 var(--g);
+  animation:lvring 1.6s ease-in-out infinite;
+}
+@keyframes lvring{
+  0%{box-shadow:0 0 0 0 #00ff8899}
+  70%{box-shadow:0 0 0 10px transparent}
+  100%{box-shadow:0 0 0 0 transparent}
+}
+.nt-live-lbl{font-size:11px;letter-spacing:4px;color:var(--g);text-shadow:var(--glow);}
+
+/* Name */
+.nt-body{
+  flex:1;padding:0 24px;
+  display:flex;flex-direction:column;justify-content:center;gap:4px;
+}
+.nt-name{
+  font-family:'Syne',sans-serif;font-size:32px;font-weight:800;
+  color:var(--w);letter-spacing:.5px;line-height:1;
+}
+.nt-platform{font-size:10px;letter-spacing:5px;color:var(--w3);}
+
+/* Right segment */
+.nt-right{
+  flex-shrink:0;height:100%;
+  padding:0 24px;border-left:2px solid var(--gb);
+  display:flex;align-items:center;justify-content:center;
+}
+.nt-gaming{
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+  color:var(--gb);letter-spacing:4px;
+}
+</style>
+</head>
+<body>
+<div class="cam">
+
+  <!-- Video content shows through (transparent) -->
+  <div class="cam-lines"></div>
+  <div class="cam-glitch"></div>
+  <div class="cam-vig"></div>
+  <div class="cam-scan"></div>
+
+  <!-- Border -->
+  <div class="cam-border"></div>
+
+  <!-- Corners -->
+  <div class="ca tl"></div>
+  <div class="ca tr"></div>
+  <div class="ca bl"></div>
+  <div class="ca br"></div>
+
+  <!-- Dots -->
+  <div class="cdot tl"></div>
+  <div class="cdot tr"></div>
+  <div class="cdot bl"></div>
+  <div class="cdot br"></div>
+
+  <!-- Ticks top -->
+  <div class="ticks-h top">
+    <div class="th b"></div><div class="th"></div><div class="th"></div><div class="th b"></div>
+    <div class="th"></div><div class="th"></div><div class="th b"></div><div class="th"></div>
+    <div class="th"></div><div class="th b"></div><div class="th"></div><div class="th"></div>
+    <div class="th b"></div><div class="th"></div><div class="th"></div><div class="th b"></div>
+    <div class="th"></div><div class="th"></div><div class="th b"></div>
+  </div>
+
+  <!-- Ticks bottom -->
+  <div class="ticks-h bot">
+    <div class="th b"></div><div class="th"></div><div class="th"></div><div class="th b"></div>
+    <div class="th"></div><div class="th"></div><div class="th b"></div><div class="th"></div>
+    <div class="th"></div><div class="th b"></div><div class="th"></div><div class="th"></div>
+    <div class="th b"></div><div class="th"></div><div class="th"></div><div class="th b"></div>
+    <div class="th"></div><div class="th"></div><div class="th b"></div>
+  </div>
+
+  <!-- Ticks left -->
+  <div class="ticks-v lft">
+    <div class="tv b"></div><div class="tv"></div><div class="tv"></div>
+    <div class="tv b"></div><div class="tv"></div><div class="tv"></div>
+    <div class="tv b"></div><div class="tv"></div><div class="tv"></div>
+    <div class="tv b"></div>
+  </div>
+
+  <!-- Ticks right -->
+  <div class="ticks-v rgt">
+    <div class="tv b"></div><div class="tv"></div><div class="tv"></div>
+    <div class="tv b"></div><div class="tv"></div><div class="tv"></div>
+    <div class="tv b"></div><div class="tv"></div><div class="tv"></div>
+    <div class="tv b"></div>
+  </div>
+
+  <!-- Tags -->
+  <div class="cam-tag"><div class="tag-dot"></div><span class="tag-lbl">CAM</span></div>
+  <div class="cam-rec">● REC</div>
+
+  <!-- Name tag -->
+  <div class="nametag">
+    <div class="nt-live">
+      <div class="nt-dot"></div>
+      <span class="nt-live-lbl">LIVE</span>
+    </div>
+    <div class="nt-body">
+      <div class="nt-name">FrankluX</div>
+      <div class="nt-platform">TIKTOK LIVE</div>
+    </div>
+    <div class="nt-right">
+      <div class="nt-gaming">GAMING</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
