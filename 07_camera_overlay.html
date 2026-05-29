@@ -2,285 +2,248 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=1080">
 <title>FrankluX — Camera Overlay</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
-  --g:#00ff88;--gb:#00ff8838;--gx:#00ff8866;
-  --w:#f0f4f0;--w2:#8a9e8a;--w3:#3a4e3a;
-  --bg:#030806;
-  --glow:0 0 8px #00ff8855,0 0 24px #00ff8820;
-  --glow2:0 0 6px #00ff88,0 0 18px #00ff8877,0 0 40px #00ff8830;
+  --g:#00ff88;--gb:#00ff8840;--gx:#00ff8870;
+  --w:#f0f4f0;--w3:#3a4e3a;
+  --glow:0 0 10px #00ff8860,0 0 30px #00ff8825;
+  --glow2:0 0 8px #00ff88,0 0 22px #00ff8888,0 0 50px #00ff8835;
 }
 body{
-  width:1080px;height:1920px;
+  width:1920px;height:1080px;
   background:transparent;
   overflow:hidden;
   font-family:'DM Mono',monospace;
 }
 
-/* ══ CAMERA FRAME — inferior izquierda ══ */
 .cam{
   position:absolute;
-  bottom:106px;
-  left:40px;
-  width:360px;
+  bottom:0;left:0;
+  width:1920px;height:1080px;
 }
 
-/* 16:9 ratio box */
-.cam-ratio{
-  position:relative;
-  width:100%;
-  padding-top:56.25%;
-}
-
-/* Transparent window — webcam shows through here */
-.cam-window{
-  position:absolute;inset:0;
-  background:transparent;
-}
-
-/* Subtle vignette on edges of cam feed */
-.cam-window::after{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse 88% 88% at 50% 50%,transparent 50%,#03080677 100%);
-  pointer-events:none;z-index:2;
-}
-
-/* Scanlines texture */
-.cam-lines{
-  position:absolute;inset:0;pointer-events:none;z-index:2;
-  background:repeating-linear-gradient(0deg,transparent,transparent 2px,#00000016 2px,#00000016 4px);
-}
-
-/* Glitch flicker */
-.cam-glitch{
-  position:absolute;inset:0;pointer-events:none;z-index:3;opacity:0;
-  animation:gfx 9s steps(1) infinite;
-}
-@keyframes gfx{
-  0%,94%,100%{opacity:0}
-  95%{opacity:1;background:linear-gradient(180deg,transparent 30%,#00ff8809 30%,#00ff8809 31%,transparent 31%);}
-  97%{opacity:1;background:linear-gradient(180deg,transparent 62%,#00ff8806 62%,#00ff8806 63%,transparent 63%);}
-  99%{opacity:0;}
-}
-
-/* Moving scan line */
-.cam-scan{
-  position:absolute;left:0;right:0;height:1px;z-index:4;pointer-events:none;
-  background:linear-gradient(90deg,transparent,#00ff8830,var(--g),#00ff8830,transparent);
-  animation:cscan 4s linear infinite;opacity:0;
-}
-@keyframes cscan{
-  0%{top:0;opacity:0}4%{opacity:.5}88%{opacity:.25}100%{top:100%;opacity:0}
-}
-
-/* ── OUTER BORDER ── */
+/* ── BORDER ── */
 .cam-border{
-  position:absolute;inset:0;z-index:5;pointer-events:none;
-  border:1px solid var(--gb);
-  box-shadow:var(--glow),inset 0 0 16px #00ff8805;
+  position:absolute;inset:0;
+  border:2px solid var(--gb);
+  box-shadow:var(--glow),inset 0 0 40px #00ff8806;
+  pointer-events:none;z-index:5;
 }
 
 /* ── CORNER ACCENTS ── */
-.ca{position:absolute;width:18px;height:18px;z-index:6;pointer-events:none;}
+.ca{position:absolute;width:48px;height:48px;z-index:6;pointer-events:none;}
 .ca::before,.ca::after{content:'';position:absolute;background:var(--g);box-shadow:var(--glow2);}
-.ca::before{width:100%;height:2px;top:0;left:0;}
-.ca::after{width:2px;height:100%;top:0;left:0;}
-.ca.tl{top:-1px;left:-1px;}
-.ca.tr{top:-1px;right:-1px;transform:scaleX(-1);}
-.ca.bl{bottom:-1px;left:-1px;transform:scaleY(-1);}
-.ca.br{bottom:-1px;right:-1px;transform:scale(-1);}
+.ca::before{width:100%;height:3px;top:0;left:0;}
+.ca::after{width:3px;height:100%;top:0;left:0;}
+.ca.tl{top:-2px;left:-2px;}
+.ca.tr{top:-2px;right:-2px;transform:scaleX(-1);}
+.ca.bl{bottom:-2px;left:-2px;transform:scaleY(-1);}
+.ca.br{bottom:-2px;right:-2px;transform:scale(-1);}
 
-/* ── CORNER GLOW DOTS ── */
-.cdot{position:absolute;width:4px;height:4px;border-radius:50%;
-  background:var(--g);box-shadow:var(--glow2);z-index:7;pointer-events:none;}
-.cdot.tl{top:5px;left:5px;}
-.cdot.tr{top:5px;right:5px;}
-.cdot.bl{bottom:5px;left:5px;}
-.cdot.br{bottom:5px;right:5px;}
+/* ── CORNER DOTS ── */
+.cdot{position:absolute;width:8px;height:8px;border-radius:50%;
+  background:var(--g);box-shadow:var(--glow2);z-index:7;}
+.cdot.tl{top:12px;left:12px;}
+.cdot.tr{top:12px;right:12px;}
+.cdot.bl{bottom:86px;left:12px;}
+.cdot.br{bottom:86px;right:12px;}
 
-/* ── RULER TICKS ── */
-.ticks-h{position:absolute;left:22px;right:22px;
+/* ── RULER TICKS top ── */
+.ticks-h{position:absolute;left:60px;right:60px;
   display:flex;justify-content:space-between;z-index:6;pointer-events:none;}
-.ticks-h.top{top:3px;}.ticks-h.bot{bottom:3px;}
-.th{width:1px;height:4px;background:var(--g);opacity:.25;}
-.th.b{height:7px;opacity:.55;}
+.ticks-h.top{top:6px;}.ticks-h.bot{bottom:86px;}
+.th{width:2px;height:8px;background:var(--g);opacity:.22;}
+.th.b{height:14px;opacity:.55;}
 
-.ticks-v{position:absolute;top:14px;bottom:14px;
+/* ── RULER TICKS sides ── */
+.ticks-v{position:absolute;top:18px;bottom:90px;
   display:flex;flex-direction:column;justify-content:space-between;z-index:6;pointer-events:none;}
-.ticks-v.lft{left:3px;}.ticks-v.rgt{right:3px;}
-.tv{width:4px;height:1px;background:var(--g);opacity:.25;}
-.tv.b{width:7px;opacity:.55;}
+.ticks-v.lft{left:6px;}.ticks-v.rgt{right:6px;}
+.tv{width:8px;height:2px;background:var(--g);opacity:.22;}
+.tv.b{width:14px;opacity:.55;}
 
-/* ── CAM ID TAG (top left) ── */
-.cam-id{
-  position:absolute;top:-1px;left:-1px;z-index:8;
+/* ── SCAN LINE ── */
+.cam-scan{
+  position:absolute;left:0;right:0;height:2px;z-index:4;pointer-events:none;
+  background:linear-gradient(90deg,transparent,#00ff8828,var(--g),#00ff8828,transparent);
+  animation:cscan 4s linear infinite;opacity:0;
+}
+@keyframes cscan{
+  0%{top:0;opacity:0}4%{opacity:.5}88%{opacity:.2}100%{top:calc(100% - 80px);opacity:0}
+}
+
+/* ── SCANLINES TEXTURE ── */
+.cam-lines{
+  position:absolute;inset:0;bottom:80px;pointer-events:none;z-index:2;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,#00000014 3px,#00000014 4px);
+}
+
+/* ── GLITCH ── */
+.cam-glitch{
+  position:absolute;inset:0;bottom:80px;pointer-events:none;z-index:3;opacity:0;
+  animation:gfx 10s steps(1) infinite;
+}
+@keyframes gfx{
+  0%,95%,100%{opacity:0}
+  96%{opacity:1;background:linear-gradient(180deg,transparent 28%,#00ff8807 28%,#00ff8807 29%,transparent 29%);}
+  98%{opacity:1;background:linear-gradient(180deg,transparent 60%,#00ff8805 60%,#00ff8805 61%,transparent 61%);}
+}
+
+/* ── VIGNETTE on cam ── */
+.cam-vig{
+  position:absolute;inset:0;bottom:80px;pointer-events:none;z-index:3;
+  background:radial-gradient(ellipse 90% 90% at 50% 50%,transparent 50%,#03080660 100%);
+}
+
+/* ── CAM TAG top left ── */
+.cam-tag{
+  position:absolute;top:-2px;left:-2px;z-index:8;
   background:#030806f0;
-  border:1px solid var(--gb);border-bottom:none;border-left:none;
-  padding:4px 12px;
-  display:flex;align-items:center;gap:6px;
+  border:2px solid var(--gb);border-bottom:none;border-left:none;
+  padding:8px 20px;
+  display:flex;align-items:center;gap:8px;
 }
-.cam-id-dot{
-  width:5px;height:5px;border-radius:50%;background:var(--g);
-  box-shadow:var(--glow2);
-  animation:idpls 2s ease-in-out infinite;
-}
-@keyframes idpls{0%,100%{opacity:1}50%{opacity:.2}}
-.cam-id-lbl{font-size:7px;letter-spacing:4px;color:var(--g);text-shadow:var(--glow);}
+.tag-dot{width:7px;height:7px;border-radius:50%;background:var(--g);
+  box-shadow:var(--glow2);animation:tdot 2s ease-in-out infinite;}
+@keyframes tdot{0%,100%{opacity:1}50%{opacity:.15}}
+.tag-lbl{font-size:12px;letter-spacing:5px;color:var(--g);text-shadow:var(--glow);}
 
-/* ── REC INDICATOR (top right) ── */
+/* ── REC tag top right ── */
 .cam-rec{
-  position:absolute;top:-1px;right:-1px;z-index:8;
+  position:absolute;top:-2px;right:-2px;z-index:8;
   background:#030806f0;
-  border:1px solid var(--gb);border-bottom:none;border-right:none;
-  padding:4px 10px;
-  font-size:7px;letter-spacing:3px;color:var(--w3);
+  border:2px solid var(--gb);border-bottom:none;border-right:none;
+  padding:8px 16px;
+  font-size:11px;letter-spacing:3px;color:var(--w3);
 }
 
-/* ══ NAME TAG (attached below frame) ══ */
-.cam-nametag{
-  width:100%;
+/* ══ NAME TAG ══ */
+.nametag{
+  position:absolute;bottom:-2px;left:-2px;right:-2px;
+  height:80px;z-index:8;
   background:#030806f2;
-  border:1px solid var(--gb);
-  border-top:none;
+  border:2px solid var(--gb);border-top:none;
   display:flex;align-items:center;
-  padding:0;
   overflow:hidden;
-  position:relative;
 }
 
-/* top edge glow line */
-.cam-nametag::before{
-  content:'';
-  position:absolute;top:0;left:0;right:0;height:1px;
+/* top glow line */
+.nametag::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1.5px;
   background:linear-gradient(90deg,transparent,var(--g),transparent);
-  box-shadow:var(--glow);
-  opacity:.5;
+  box-shadow:var(--glow);opacity:.55;
 }
 
-/* LIVE badge */
+/* LIVE section */
 .nt-live{
-  flex-shrink:0;
-  padding:12px 14px;
-  border-right:1px solid var(--gb);
-  display:flex;flex-direction:column;align-items:center;gap:4px;
+  flex-shrink:0;height:100%;
+  padding:0 28px;
+  border-right:2px solid var(--gb);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
   background:#00ff8806;
 }
 .nt-dot{
-  width:6px;height:6px;border-radius:50%;background:var(--g);
+  width:10px;height:10px;border-radius:50%;background:var(--g);
   box-shadow:0 0 0 0 var(--g);
-  animation:livering 1.6s ease-in-out infinite;
+  animation:lvring 1.6s ease-in-out infinite;
 }
-@keyframes livering{
-  0%{box-shadow:0 0 0 0 #00ff8888}
-  70%{box-shadow:0 0 0 7px transparent}
+@keyframes lvring{
+  0%{box-shadow:0 0 0 0 #00ff8899}
+  70%{box-shadow:0 0 0 10px transparent}
   100%{box-shadow:0 0 0 0 transparent}
 }
-.nt-live-lbl{
-  font-size:7px;letter-spacing:3px;color:var(--g);
-  text-shadow:var(--glow);
-}
+.nt-live-lbl{font-size:11px;letter-spacing:4px;color:var(--g);text-shadow:var(--glow);}
 
-/* Name + platform */
+/* Name */
 .nt-body{
-  flex:1;padding:10px 14px;
-  display:flex;flex-direction:column;justify-content:center;gap:3px;
+  flex:1;padding:0 24px;
+  display:flex;flex-direction:column;justify-content:center;gap:4px;
 }
 .nt-name{
-  font-family:'Syne',sans-serif;font-size:20px;font-weight:800;
+  font-family:'Syne',sans-serif;font-size:32px;font-weight:800;
   color:var(--w);letter-spacing:.5px;line-height:1;
 }
-.nt-platform{
-  font-size:7px;letter-spacing:4px;color:var(--w3);
-}
+.nt-platform{font-size:10px;letter-spacing:5px;color:var(--w3);}
 
-/* Right — stream indicator */
+/* Right segment */
 .nt-right{
-  padding:10px 14px;border-left:1px solid var(--gb);
-  display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0;
+  flex-shrink:0;height:100%;
+  padding:0 24px;border-left:2px solid var(--gb);
+  display:flex;align-items:center;justify-content:center;
 }
-.nt-tag{
-  font-size:7px;letter-spacing:3px;color:var(--w3);
-}
-.nt-status{
-  font-family:'Space Mono',monospace;font-size:11px;font-weight:700;
-  color:var(--g);text-shadow:var(--glow);letter-spacing:1px;
+.nt-gaming{
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+  color:var(--gb);letter-spacing:4px;
 }
 </style>
 </head>
 <body>
-
 <div class="cam">
-  <!-- FRAME -->
-  <div class="cam-ratio">
 
-    <!-- Video window (transparent) -->
-    <div class="cam-window">
-      <div class="cam-lines"></div>
-      <div class="cam-glitch"></div>
-    </div>
+  <!-- Video content shows through (transparent) -->
+  <div class="cam-lines"></div>
+  <div class="cam-glitch"></div>
+  <div class="cam-vig"></div>
+  <div class="cam-scan"></div>
 
-    <!-- Animated scan -->
-    <div class="cam-scan"></div>
+  <!-- Border -->
+  <div class="cam-border"></div>
 
-    <!-- Border -->
-    <div class="cam-border"></div>
+  <!-- Corners -->
+  <div class="ca tl"></div>
+  <div class="ca tr"></div>
+  <div class="ca bl"></div>
+  <div class="ca br"></div>
 
-    <!-- Corner accents -->
-    <div class="ca tl"></div>
-    <div class="ca tr"></div>
-    <div class="ca bl"></div>
-    <div class="ca br"></div>
+  <!-- Dots -->
+  <div class="cdot tl"></div>
+  <div class="cdot tr"></div>
+  <div class="cdot bl"></div>
+  <div class="cdot br"></div>
 
-    <!-- Glow dots -->
-    <div class="cdot tl"></div>
-    <div class="cdot tr"></div>
-    <div class="cdot bl"></div>
-    <div class="cdot br"></div>
-
-    <!-- Ruler ticks — top -->
-    <div class="ticks-h top">
-      <div class="th b"></div><div class="th"></div><div class="th"></div>
-      <div class="th b"></div><div class="th"></div><div class="th"></div>
-      <div class="th b"></div><div class="th"></div><div class="th"></div>
-      <div class="th b"></div>
-    </div>
-    <!-- Ruler ticks — bottom -->
-    <div class="ticks-h bot">
-      <div class="th b"></div><div class="th"></div><div class="th"></div>
-      <div class="th b"></div><div class="th"></div><div class="th"></div>
-      <div class="th b"></div><div class="th"></div><div class="th"></div>
-      <div class="th b"></div>
-    </div>
-    <!-- Ruler ticks — left -->
-    <div class="ticks-v lft">
-      <div class="tv b"></div><div class="tv"></div>
-      <div class="tv b"></div><div class="tv"></div>
-      <div class="tv b"></div>
-    </div>
-    <!-- Ruler ticks — right -->
-    <div class="ticks-v rgt">
-      <div class="tv b"></div><div class="tv"></div>
-      <div class="tv b"></div><div class="tv"></div>
-      <div class="tv b"></div>
-    </div>
-
-    <!-- ID tag top left -->
-    <div class="cam-id">
-      <div class="cam-id-dot"></div>
-      <span class="cam-id-lbl">CAM</span>
-    </div>
-
-    <!-- REC tag top right -->
-    <div class="cam-rec">● REC</div>
-
+  <!-- Ticks top -->
+  <div class="ticks-h top">
+    <div class="th b"></div><div class="th"></div><div class="th"></div><div class="th b"></div>
+    <div class="th"></div><div class="th"></div><div class="th b"></div><div class="th"></div>
+    <div class="th"></div><div class="th b"></div><div class="th"></div><div class="th"></div>
+    <div class="th b"></div><div class="th"></div><div class="th"></div><div class="th b"></div>
+    <div class="th"></div><div class="th"></div><div class="th b"></div>
   </div>
 
-  <!-- NAME TAG below frame -->
-  <div class="cam-nametag">
+  <!-- Ticks bottom -->
+  <div class="ticks-h bot">
+    <div class="th b"></div><div class="th"></div><div class="th"></div><div class="th b"></div>
+    <div class="th"></div><div class="th"></div><div class="th b"></div><div class="th"></div>
+    <div class="th"></div><div class="th b"></div><div class="th"></div><div class="th"></div>
+    <div class="th b"></div><div class="th"></div><div class="th"></div><div class="th b"></div>
+    <div class="th"></div><div class="th"></div><div class="th b"></div>
+  </div>
+
+  <!-- Ticks left -->
+  <div class="ticks-v lft">
+    <div class="tv b"></div><div class="tv"></div><div class="tv"></div>
+    <div class="tv b"></div><div class="tv"></div><div class="tv"></div>
+    <div class="tv b"></div><div class="tv"></div><div class="tv"></div>
+    <div class="tv b"></div>
+  </div>
+
+  <!-- Ticks right -->
+  <div class="ticks-v rgt">
+    <div class="tv b"></div><div class="tv"></div><div class="tv"></div>
+    <div class="tv b"></div><div class="tv"></div><div class="tv"></div>
+    <div class="tv b"></div><div class="tv"></div><div class="tv"></div>
+    <div class="tv b"></div>
+  </div>
+
+  <!-- Tags -->
+  <div class="cam-tag"><div class="tag-dot"></div><span class="tag-lbl">CAM</span></div>
+  <div class="cam-rec">● REC</div>
+
+  <!-- Name tag -->
+  <div class="nametag">
     <div class="nt-live">
       <div class="nt-dot"></div>
       <span class="nt-live-lbl">LIVE</span>
@@ -290,21 +253,10 @@ body{
       <div class="nt-platform">TIKTOK LIVE</div>
     </div>
     <div class="nt-right">
-      <div class="nt-tag">STREAMING</div>
-      <div class="nt-status" id="liveTime">00:00</div>
+      <div class="nt-gaming">GAMING</div>
     </div>
   </div>
-</div>
 
-<script>
-const t0=Date.now();
-const pad=n=>String(n).padStart(2,'0');
-setInterval(()=>{
-  const s=Math.floor((Date.now()-t0)/1000);
-  const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sc=s%60;
-  document.getElementById('liveTime').textContent=
-    h>0?`${h}:${pad(m)}:${pad(sc)}`:`${pad(m)}:${pad(sc)}`;
-},1000);
-</script>
+</div>
 </body>
 </html>
